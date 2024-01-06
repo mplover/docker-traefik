@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: "traefik"
+    container_name: "traefik"
+    restart: "unless-stopped"
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "./config.yml:/etc/traefik/config.yml:ro"
+      - "./certs:/etc/certs"
+    labels:
+      - "traefik.enable=false"
